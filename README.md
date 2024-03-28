@@ -3,7 +3,7 @@
 <p align="center">
 <a href="https://packagist.org/packages/jeffreyvanrossum/wp-log"><img src="https://img.shields.io/packagist/dt/jeffreyvanrossum/wp-log" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/jeffreyvanrossum/wp-log"><img src="https://img.shields.io/packagist/v/jeffreyvanrossum/wp-log" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/jeffreyvanrossum/wp-log"><img src="https://img.shields.io/packagist/ljeffreyvanrossum/wp-log" alt="License"></a>
+<a href="https://packagist.org/packages/jeffreyvanrossum/wp-log"><img src="https://img.shields.io/packagist/l/jeffreyvanrossum/wp-log" alt="License"></a>
 </p>
 
 # WP Log
