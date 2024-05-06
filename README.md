@@ -49,7 +49,13 @@ The `interface` method will render an interface, which you can use to display th
 If you want to display the log page in the admin menu, you can call:
 
 ```php
-$log->interface()->inAdminMenu(slug: 'optional-slug', capability: 'manage_options');
+$log->interface()->inAdminMenu(slug: 'optional-slug', parent: 'tools.php');
+```
+
+To set a custom capability use:
+
+```php
+$log->interface->setCapability('manage_options');
 ```
 
 Or if you want to add it as a plugin link instead:
