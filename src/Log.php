@@ -12,7 +12,7 @@ class Log
 
     public function __construct(public string $name)
     {
-        $this->filePath = wp_upload_dir()['basedir'].sanitize_title($name).'.log';
+        $this->filePath = wp_upload_dir()['basedir'].'/'.sanitize_title($name).'.log';
     }
 
     public function interface(): LogInterface
@@ -26,6 +26,10 @@ class Log
 
     public function isFileWritable(): bool
     {
+        if (! $this->fileExists()) {
+            return is_writable(dirname($this->filePath));
+        }
+
         return is_writable($this->filePath);
     }
 
@@ -48,8 +52,17 @@ class Log
         return file_put_contents($this->filePath, '');
     }
 
+    public function fileExists(): bool
+    {
+        return file_exists($this->filePath);
+    }
+
     public function getItems($limit = 'none'): array
     {
+        if (! $this->fileExists()) {
+            return [];
+        }
+
         $contents = trim(file_get_contents($this->filePath));
 
         $items = explode(PHP_EOL, $contents);

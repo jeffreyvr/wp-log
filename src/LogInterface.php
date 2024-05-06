@@ -38,9 +38,22 @@ class LogInterface
         return 'wp-log-'.sanitize_title($this->log->name);
     }
 
-    public function inAdminMenu($slug = null, $icon = 'dashicons-media-text'): void
+    public function inAdminMenu($slug = null, $parent = null, $icon = 'dashicons-media-text'): void
     {
-        add_action('admin_menu', function () use ($slug, $icon) {
+        add_action('admin_menu', function () use ($slug, $icon, $parent) {
+            if ($parent) {
+                add_submenu_page(
+                    $parent,
+                    $this->log->name,
+                    $this->log->name,
+                    $this->capability,
+                    $slug ?? $this->generateSlug($this->log->name),
+                    [$this, 'pageRender']
+                );
+
+                return;
+            }
+
             add_menu_page(
                 $this->log->name,
                 $this->log->name,
