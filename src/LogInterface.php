@@ -5,10 +5,25 @@ namespace Jeffreyvr\WPLog;
 class LogInterface
 {
     public string $capability = 'manage_options';
+    public string|null $slug = null;
 
     public function __construct(public Log $log)
     {
         $this->maybeClearLog();
+
+        $this->slug = $this->generateSlug();
+    }
+
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     public function setCapability(string $capability): self
@@ -20,7 +35,7 @@ class LogInterface
 
     public function maybeClearLog(): void
     {
-        add_action('admin_post_clear_log_'.$this->generateSlug(), function () {
+        add_action('admin_post_clear_log_'.$this->getSlug(), function () {
             if (! current_user_can($this->capability)) {
                 wp_die('Access denied');
             }
@@ -40,6 +55,10 @@ class LogInterface
 
     public function inAdminMenu($slug = null, $parent = null, $icon = 'dashicons-media-text'): void
     {
+        if($slug) {
+            $this->setSlug($slug);
+        }
+
         add_action('admin_menu', function () use ($slug, $icon, $parent) {
             if ($parent) {
                 add_submenu_page(
@@ -47,7 +66,7 @@ class LogInterface
                     $this->log->name,
                     $this->log->name,
                     $this->capability,
-                    $slug ?? $this->generateSlug($this->log->name),
+                    $this->getSlug(),
                     [$this, 'pageRender']
                 );
 
@@ -58,22 +77,22 @@ class LogInterface
                 $this->log->name,
                 $this->log->name,
                 $this->capability,
-                $slug ?? $this->generateSlug($this->log->name),
+                $this->getSlug(),
                 [$this, 'pageRender'],
                 $icon
             );
         });
     }
 
-    public function asHiddenAdminPage($slug = null): void
+    public function asHiddenAdminPage(): void
     {
-        add_action('admin_menu', function () use ($slug) {
+        add_action('admin_menu', function () {
             add_submenu_page(
                 null,
                 $this->log->name,
                 $this->log->name,
                 $this->capability,
-                $slug ?? $this->generateSlug($this->log->name),
+                $this->getSlug(),
                 [$this, 'pageRender']
             );
         });
@@ -81,10 +100,10 @@ class LogInterface
 
     public function asPluginLink($baseName, $slug = null, $text = 'View Log')
     {
-        $this->asHiddenAdminPage($slug);
+        $this->asHiddenAdminPage();
 
-        add_filter('plugin_action_links_'.$baseName, function ($links) use ($text, $slug) {
-            $links[] = '<a href="'.admin_url('admin.php?page='.($slug ?? $this->generateSlug($this->log->name))).'">'.$text.'</a>';
+        add_filter('plugin_action_links_'.$baseName, function ($links) use ($text) {
+            $links[] = '<a href="'.admin_url('admin.php?page='.$this->getSlug()).'">'.$text.'</a>';
 
             return $links;
         });
@@ -118,11 +137,11 @@ class LogInterface
             <?php } ?>
 
             <div>
-                <a href="<?php echo admin_url('admin.php?page=include-text&limit=25'); ?>">25</a> |
-                <a href="<?php echo admin_url('admin.php?page=include-text&limit=50'); ?>">50</a> |
-                <a href="<?php echo admin_url('admin.php?page=include-text&limit=100'); ?>">100</a> |
-                <a href="<?php echo admin_url('admin.php?page=include-text&limit=none'); ?>">Show all</a> |
-                <a href="<?php echo admin_url('admin-post.php?action=clear_log_'.$this->generateSlug()); ?>">Clear log</a>
+                <a href="<?php echo admin_url('admin.php?page='.$this->getSlug().'&limit=25'); ?>">25</a> |
+                <a href="<?php echo admin_url('admin.php?page='.$this->getSlug().'&limit=50'); ?>">50</a> |
+                <a href="<?php echo admin_url('admin.php?page='.$this->getSlug().'&limit=100'); ?>">100</a> |
+                <a href="<?php echo admin_url('admin.php?page='.$this->getSlug().'&limit=none'); ?>">Show all</a> |
+                <a href="<?php echo admin_url('admin-post.php?action=clear_log_'.$this->getSlug()); ?>">Clear log</a>
             </div>
 
             <div class="log-items">
