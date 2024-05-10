@@ -4,6 +4,8 @@ All notable changes to `wp-log` will be documented in this file
 
 ## Unreleased
 
+## 0.2.1
+
 - fix slug on limit links in interface
 
 ## 0.2.0
