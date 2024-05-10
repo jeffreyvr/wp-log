@@ -4,6 +4,8 @@ All notable changes to `wp-log` will be documented in this file
 
 ## Unreleased
 
+- fix slug on limit links in interface
+
 ## 0.2.0
 
 - allow to set interface as admin menu sub item
