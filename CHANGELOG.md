@@ -4,6 +4,8 @@ All notable changes to `wp-log` will be documented in this file
 
 ## Unreleased
 
+## 0.2.2
+
 - use regex to split up log items instead of using PHP_EOL
 - make timestamp of log entry bold in log interface
 
