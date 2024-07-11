@@ -9,9 +9,9 @@ class LogInterface
 
     public function __construct(public Log $log)
     {
-        $this->maybeClearLog();
-
         $this->slug = $this->generateSlug();
+
+        $this->maybeClearLog();
     }
 
     public function setSlug($slug)
