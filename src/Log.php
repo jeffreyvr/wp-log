@@ -63,11 +63,13 @@ class Log
             return [];
         }
 
-        $contents = trim(file_get_contents($this->filePath));
+        $contents = file_get_contents($this->filePath);
+        $pattern = '/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] [^\n]*\n?/';
+        preg_match_all($pattern, $contents, $matches);
 
-        $items = explode(PHP_EOL, $contents);
+        $items = $matches[0];
 
-        if ($limit != 'none') {
+        if ($limit !== 'none') {
             $items = array_slice($items, -$limit);
         }
 
@@ -99,6 +101,8 @@ class Log
 
         if (is_array($entry) || is_object($entry)) {
             $message = print_r($entry, true);
+        } elseif (is_bool($entry)) {
+            $message = $entry ? 'true' : 'false';
         } else {
             $message = $entry;
         }

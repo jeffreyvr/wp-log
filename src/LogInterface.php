@@ -55,7 +55,7 @@ class LogInterface
 
     public function inAdminMenu($slug = null, $parent = null, $icon = 'dashicons-media-text'): void
     {
-        if($slug) {
+        if ($slug) {
             $this->setSlug($slug);
         }
 
@@ -111,7 +111,9 @@ class LogInterface
 
     public function render($limit = 25)
     {
-        $items = $this->log->getItems($limit);
+        $items = array_map(function ($item) {
+            return preg_replace('/(\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\])/', '<strong>$1</strong>', $item);
+        }, $this->log->getItems($limit));
 
         $output = '';
 
